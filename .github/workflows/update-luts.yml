@@ -75,8 +75,10 @@ jobs:
           fileName: 'FFXIVDownloader.Command-linux-x64'
           latest: true
       
-      - name: Chmod Executable
-        run: chmod +x FFXIVDownloader.Command
+      - name: Setup Executable
+        run: |
+          mv FFXIVDownloader.Command-linux-x64 FFXIVDownloader.Command
+          chmod +x FFXIVDownloader.Command
 
       - name: Retrieve LUTs
         uses: nick-fields/retry@v3
