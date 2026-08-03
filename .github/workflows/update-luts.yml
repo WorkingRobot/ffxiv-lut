@@ -118,23 +118,27 @@ jobs:
           if [ "$mode" = all ]; then
             echo "lut_args=--all-versions" >> $GITHUB_OUTPUT
             echo "clut_args=--all-versions" >> $GITHUB_OUTPUT
-            echo "lut_timeout=120" >> $GITHUB_OUTPUT
+            echo "lut_timeout=100" >> $GITHUB_OUTPUT
+            echo "lut_attempts=3" >> $GITHUB_OUTPUT
           else
             echo "lut_args=" >> $GITHUB_OUTPUT
             echo "clut_args=" >> $GITHUB_OUTPUT
             echo "lut_timeout=15" >> $GITHUB_OUTPUT
+            echo "lut_attempts=3" >> $GITHUB_OUTPUT
           fi
           echo "Running in $mode mode"
 
-      # Both steps leave what they finished on disk, so a run that gives up part way
-      # still commits its progress and the next one carries on from there.
+      # Both steps leave what they finished on disk, so a run that gives up part way still
+      # commits its progress and the next one carries on from there. Every attempt has to fit
+      # inside the job's own timeout: past it the runner is cancelled rather than failed, which
+      # no `continue-on-error` covers, and the whole run's work goes with it.
       - name: Retrieve LUTs
         if: env.SELECTED == 'true'
         continue-on-error: true
         uses: nick-fields/retry@v4
         with:
           timeout_minutes: ${{steps.mode.outputs.lut_timeout}}
-          max_attempts: 3
+          max_attempts: ${{steps.mode.outputs.lut_attempts}}
           command: |
             ./xiv-dl --verbose lut -s "${{matrix.slug}}" -o "luts/${{matrix.slug}}" -c Brotli ${{steps.mode.outputs.lut_args}}
 
@@ -147,13 +151,13 @@ jobs:
           ./xiv-dl --verbose --debug clut -s "${{matrix.slug}}" -b "luts/${{matrix.slug}}" -o "cluts/${{matrix.slug}}" ${{steps.mode.outputs.clut_args}}
 
       - name: Extract branch name
-        if: env.SELECTED == 'true'
+        if: always() && env.SELECTED == 'true'
         id: extract_branch
         shell: bash
         run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
 
       - name: Commit Changes
-        if: env.SELECTED == 'true'
+        if: always() && env.SELECTED == 'true'
         id: commit
         continue-on-error: true
         env:
@@ -167,7 +171,7 @@ jobs:
           git commit -m "Update Lookups for $NAME" --author="$ACTOR <$ACTOR@users.noreply.github.com>"
 
       - name: Fetch, Rebase, and Push
-        if: env.SELECTED == 'true' && steps.commit.conclusion == 'success'
+        if: always() && env.SELECTED == 'true' && steps.commit.conclusion == 'success'
         uses: nick-fields/retry@v4
         with:
           timeout_minutes: 2
