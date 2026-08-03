@@ -14,10 +14,6 @@ on:
         description: Only run this repository slug. Empty runs all of them.
         type: string
         default: ''
-      max_patch_bytes:
-        description: Patch bytes one "all" run may download per repository before leaving the rest to the next.
-        type: string
-        default: '8589934592'
 
 jobs:
   download:
@@ -104,25 +100,23 @@ jobs:
           mv xiv-dl-linux-x64 xiv-dl
           chmod +x xiv-dl
 
-      # Folding every lineage is far too much work to repeat every couple of hours, so
-      # the frequent run keeps the live version current and the daily one picks up the
-      # rest. While the older lineages are still being filled in a budget keeps one run
-      # finite; it spends that budget oldest first, because a CLUT needs every LUT
-      # before it in its lineage.
+      # Folding every lineage is far too much work to repeat every couple of hours, so the
+      # frequent run keeps the live version current and the daily one picks up the rest.
+      # Nothing bounds how much a daily run downloads: a patch is parsed as it streams and
+      # never stored, so the step timeout is the only limit worth having.
       - name: Choose mode
         if: env.SELECTED == 'true'
         id: mode
         env:
           SCHEDULE: ${{github.event.schedule}}
           REQUESTED: ${{github.event.inputs.mode}}
-          BUDGET: ${{github.event.inputs.max_patch_bytes}}
         run: |
           mode="$REQUESTED"
           if [ -z "$mode" ] || [ "$mode" = auto ]; then
             if [ "$SCHEDULE" = '40 3 * * *' ]; then mode=all; else mode=chain; fi
           fi
           if [ "$mode" = all ]; then
-            echo "lut_args=--all-versions --max-patch-bytes ${BUDGET:-8589934592}" >> $GITHUB_OUTPUT
+            echo "lut_args=--all-versions" >> $GITHUB_OUTPUT
             echo "clut_args=--all-versions" >> $GITHUB_OUTPUT
             echo "lut_timeout=120" >> $GITHUB_OUTPUT
           else
