@@ -33,58 +33,58 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - slug: 2b5cbc63
+        - slug: '2b5cbc63'
           name: global/boot
-        - slug: 4e9a232b
+        - slug: '4e9a232b'
           name: global/ffxiv
-        - slug: 6b936f08
+        - slug: '6b936f08'
           name: global/ex1
-        - slug: f29a3eb2
+        - slug: 'f29a3eb2'
           name: global/ex2
-        - slug: 859d0e24
+        - slug: '859d0e24'
           name: global/ex3
-        - slug: 1bf99b87
+        - slug: '1bf99b87'
           name: global/ex4
-        - slug: 6cfeab11
+        - slug: '6cfeab11'
           name: global/ex5
 
-        - slug: 0b90d03e
+        - slug: '0b90d03e'
           name: taiwan/ffxiv
-        - slug: be3c0f25
+        - slug: 'be3c0f25'
           name: taiwan/ex1
-        - slug: 27355e9f
+        - slug: '27355e9f'
           name: taiwan/ex2
-        - slug: 50326e09
+        - slug: '50326e09'
           name: taiwan/ex3
-        - slug: ce56fbaa
+        - slug: 'ce56fbaa'
           name: taiwan/ex4
-        - slug: b951cb3c
+        - slug: 'b951cb3c'
           name: taiwan/ex5
 
-        - slug: de199059
+        - slug: 'de199059'
           name: korea/ffxiv
-        - slug: 573d8c07
+        - slug: '573d8c07'
           name: korea/ex1
-        - slug: ce34ddbd
+        - slug: 'ce34ddbd'
           name: korea/ex2
-        - slug: b933ed2b
+        - slug: 'b933ed2b'
           name: korea/ex3
         - slug: '27577888'
           name: korea/ex4
-        - slug: 5050481e
+        - slug: '5050481e'
           name: korea/ex5
 
-        - slug: c38effbc
+        - slug: 'c38effbc'
           name: china/ffxiv
-        - slug: 77420d17
+        - slug: '77420d17'
           name: china/ex1
-        - slug: ee4b5cad
+        - slug: 'ee4b5cad'
           name: china/ex2
-        - slug: 994c6c3b
+        - slug: '994c6c3b'
           name: china/ex3
-        - slug: 0728f998
+        - slug: '0728f998'
           name: china/ex4
-        - slug: 702fc90e
+        - slug: '702fc90e'
           name: china/ex5
 
     steps:
