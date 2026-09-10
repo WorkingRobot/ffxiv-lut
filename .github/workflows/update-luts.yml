@@ -48,6 +48,19 @@ jobs:
         - slug: 6cfeab11
           name: global/ex5
 
+        - slug: 0b90d03e
+          name: taiwan/ffxiv
+        - slug: be3c0f25
+          name: taiwan/ex1
+        - slug: 27355e9f
+          name: taiwan/ex2
+        - slug: 50326e09
+          name: taiwan/ex3
+        - slug: ce56fbaa
+          name: taiwan/ex4
+        - slug: b951cb3c
+          name: taiwan/ex5
+
         - slug: de199059
           name: korea/ffxiv
         - slug: 573d8c07
